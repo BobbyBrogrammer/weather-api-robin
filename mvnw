@@ -117,7 +117,7 @@ while IFS="=" read -r key value; do
 done <"$scriptDir/.mvn/wrapper/maven-wrapper.properties"
 [ -n "${distributionUrl-}" ] || die "cannot read distributionUrl property in $scriptDir/.mvn/wrapper/maven-wrapper.properties"
 
-case "${distributionUrl##*/}" in
+case "${distributionUrl##**/}" in
 maven-mvnd-*bin.*)
   MVN_CMD=mvnd.sh _MVNW_REPO_PATTERN=/maven/mvnd/
   case "${PROCESSOR_ARCHITECTURE-}${PROCESSOR_ARCHITEW6432-}:$(uname -a)" in
@@ -139,7 +139,7 @@ esac
 # apply MVNW_REPOURL and calculate MAVEN_HOME
 # maven home pattern: ~/.m2/wrapper/dists/{apache-maven-<version>,maven-mvnd-<version>-<platform>}/<hash>
 [ -z "${MVNW_REPOURL-}" ] || distributionUrl="$MVNW_REPOURL$_MVNW_REPO_PATTERN${distributionUrl#*"$_MVNW_REPO_PATTERN"}"
-distributionUrlName="${distributionUrl##*/}"
+distributionUrlName="${distributionUrl##**/}"
 distributionUrlNameMain="${distributionUrlName%.*}"
 distributionUrlNameMain="${distributionUrlNameMain%-bin}"
 MAVEN_USER_HOME="${MAVEN_USER_HOME:-${HOME}/.m2}"
@@ -168,7 +168,7 @@ else
   die "cannot create temp dir"
 fi
 
-mkdir -p -- "${MAVEN_HOME%/*}"
+mkdir -p -- "${MAVEN_HOME%/**}"
 
 # Download and Install Apache Maven
 verbose "Couldn't find MAVEN_HOME, downloading and installing it ..."
@@ -178,7 +178,7 @@ verbose "Downloading to: $TMP_DOWNLOAD_DIR/$distributionUrlName"
 # select .zip or .tar.gz
 if ! command -v unzip >/dev/null; then
   distributionUrl="${distributionUrl%.zip}.tar.gz"
-  distributionUrlName="${distributionUrl##*/}"
+  distributionUrlName="${distributionUrl##**/}"
 fi
 
 # verbose opt
@@ -270,7 +270,7 @@ fi
 if [ -z "$actualDistributionDir" ]; then
   # enable globbing to iterate over items
   set +f
-  for dir in "$TMP_DOWNLOAD_DIR"/*; do
+  for dir in "$TMP_DOWNLOAD_DIR"/**; do
     if [ -d "$dir" ]; then
       if [ -f "$dir/bin/$MVN_CMD" ]; then
         actualDistributionDir="$(basename "$dir")"

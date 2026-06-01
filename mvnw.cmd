@@ -56,7 +56,7 @@ if (!$distributionUrl) {
   Write-Error "cannot read distributionUrl property in $scriptDir/.mvn/wrapper/maven-wrapper.properties"
 }
 
-switch -wildcard -casesensitive ( $($distributionUrl -replace '^.*/','') ) {
+switch -wildcard -casesensitive ( $($distributionUrl -replace '^.**/','') ) {
   "maven-mvnd-*" {
     $USE_MVND = $true
     $distributionUrl = $distributionUrl -replace '-bin\.[^.]*$',"-windows-amd64.zip"
@@ -76,7 +76,7 @@ if ($env:MVNW_REPOURL) {
   $MVNW_REPO_PATTERN = if ($USE_MVND -eq $False) { "/org/apache/maven/" } else { "/maven/mvnd/" }
   $distributionUrl = "$env:MVNW_REPOURL$MVNW_REPO_PATTERN$($distributionUrl -replace "^.*$MVNW_REPO_PATTERN",'')"
 }
-$distributionUrlName = $distributionUrl -replace '^.*/',''
+$distributionUrlName = $distributionUrl -replace '^.**/',''
 $distributionUrlNameMain = $distributionUrlName -replace '\.[^.]*$','' -replace '-bin$',''
 
 $MAVEN_M2_PATH = "$HOME/.m2"

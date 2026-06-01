@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+/**
+ * Den här representerar en REST-controller som exponerar end pointsen GET /api/recommendations
+ * och delegerar logiken till RecommendationService
+ */
 @RestController
 @RequestMapping("/api/recommendations")
 @RequiredArgsConstructor //Tack vare Lombok, undviker jag boilerplate!
