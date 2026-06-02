@@ -42,6 +42,7 @@ public class WeatherClient {
                         response.current().temp_c()
                 ));
     }
+    // Private records för att tolka WeatherAPI:s JSON svar!
     private record WeatherApiResponse(Location location, Current current) {}
     private record Location(String name) {}
     private record Current(double temp_c, Condition condition) {}

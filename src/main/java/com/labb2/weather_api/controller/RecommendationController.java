@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 /**
- * Den här representerar en REST-controller som exponerar end pointsen GET /api/recommendations
- * och delegerar logiken till RecommendationService
+ * Den här klassen är en REST-controller som tar emot GET-anrop på /api/recommendations
+ * och skickar vidare till RecommendationService som sköter logiken
  */
 @RestController
 @RequestMapping("/api/recommendations")
