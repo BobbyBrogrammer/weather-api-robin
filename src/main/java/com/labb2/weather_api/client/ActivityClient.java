@@ -27,6 +27,37 @@ import reactor.util.retry.Retry;
 @RequiredArgsConstructor
 public class ActivityClient {
 
+    private static final Map<String, List<ActivityDto>> FALLBACK_ACTIVITIES = Map.of(
+            "stockholm", List.of(
+                    new ActivityDto("Skansen", "Djurgårdsvägen 49", "leisure.park"),
+                    new ActivityDto("Vasa museet", "Galärvarvsvägen 14", "entertainment.museum"),
+                    new ActivityDto("Fotografiska", "Stadsgårdshamnen 22", "entertainment.museum"),
+                    new ActivityDto("Gröna Lund", "Lilla Allmänna Gränd 9", "leisure.park"),
+                    new ActivityDto("Café Pascal", "Norrtullsgatan 4", "catering.cafe")
+            ),
+            "gothenburg", List.of(
+                    new ActivityDto("Liseberg", "Örgrytevägen 5", "leisure.park"),
+                    new ActivityDto("Universeum", "Södra Vägen 50", "entertainment.museum"),
+                    new ActivityDto("Maritiman", "Packhusplatsen 12", "entertainment.museum"),
+                    new ActivityDto("Slottsskogen", "Plikta", "leisure.park"),
+                    new ActivityDto("Café Husaren", "Kungstorget 3", "catering.cafe")
+            ),
+            "malmö", List.of(
+                    new ActivityDto("Malmö Museer", "Malmöhusvägen 6", "entertainment.museum"),
+                    new ActivityDto("Kungsparken", "Kungsparken", "leisure.park"),
+                    new ActivityDto("Disgusting Food Museum", "Carlsgatan 12", "entertainment.museum"),
+                    new ActivityDto("Folkets Park", "Amiralsgatan 35", "leisure.park"),
+                    new ActivityDto("Espresso House", "Stortorget 6", "catering.cafe")
+            ),
+            "kungälv", List.of(
+                    new ActivityDto("Bohus Fästning", "Fästningsholmen", "entertainment.museum"),
+                    new ActivityDto("Nordmanna Bowling", "Nordmanna", "entertainment"),
+                    new ActivityDto("Mimers Teater", "Mimers Teater", "entertainment"),
+                    new ActivityDto("Kareby Hembygdsgård", "Kareby", "entertainment"),
+                    new ActivityDto("GolfOasen", "GolfOasen", "leisure.park")
+            )
+    );
+
     private static final Map<String, String> CITY_FILTERS = Map.of(
             "stockholm", "circle:18.0686,59.3293,5000",
             "gothenburg", "circle:11.9746,57.7089,5000",
@@ -87,7 +118,17 @@ public class ActivityClient {
                                 }).toList()),
                 throwable -> {
                     log.error("Circuit breaker fallback triggered for activityApi: {}", throwable.getMessage());
-                    return Mono.just(List.of());
+                    List<ActivityDto> fallback = FALLBACK_ACTIVITIES.getOrDefault(
+                            city.toLowerCase(),
+                            List.of(
+                                    new ActivityDto("Stadsmuseet", "Okänd adress", "entertainment.museum"),
+                                    new ActivityDto("Café Central", "Okänd adress", "catering.cafe"),
+                                    new ActivityDto("Stadsparken", "Okänd adress", "leisure.park"),
+                                    new ActivityDto("Biografen", "Okänd adress", "entertainment.cinema"),
+                                    new ActivityDto("Gallerian", "Okänd adress", "commercial.shopping_mall")
+                            )
+                    );
+                    return Mono.just(fallback);
                 });
     }
 

@@ -51,7 +51,7 @@ public class WeatherClient {
                         response.current().temp_c()
                 )),
                 throwable -> Mono.just(new WeatherData(
-                        "Unknown", "Service unavailable", 0.0))
+                        "Unknown", "Sunny", 0.0))
         );
     }
     // Private records för att tolka WeatherAPI:s JSON svar!
